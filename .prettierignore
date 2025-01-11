@@ -1,0 +1,9 @@
+#file name where the prettier setting should not be applied.
+
+/.vscode
+/node_modules
+./dist
+
+*.env
+.env
+.env.*
