@@ -6,6 +6,7 @@ const asyncHandler = (requestHandler) => {
   };
 };
 
+
 export { asyncHandler };
 
 // other way using try catch
