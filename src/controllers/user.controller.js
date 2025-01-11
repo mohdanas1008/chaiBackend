@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullName, email, password } = req.body;
   // s1 none of them should be empty
