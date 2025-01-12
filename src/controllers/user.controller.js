@@ -179,16 +179,14 @@ const RefreshAccessToken = asyncHandler(async (req, res) => {
       throw new ApiError(401, "Invalid Token Recived!");
     }
   
-    const refreshToken = user?.refreshToken;
-    if (incomingRefreshToken != refreshToken) {
+    const existingRefreshToken = user?.refreshToken;
+    if (incomingRefreshToken !=existingRefreshToken) {
       throw new ApiError(401, "Refresh Token is Expired or used!");
     }
   
-    const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
-    user.refreshToken = newRefreshToken;
-    await user.save({ validateBeforeSave: false });
   
     const cookieOptions = {
       httpOnly: true,
@@ -197,11 +195,11 @@ const RefreshAccessToken = asyncHandler(async (req, res) => {
     res
       .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
-      .cookie("refreshToken", newRefreshToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json(
         new ApiResponse(
           200,
-          { accessToken, refreshToken: newRefreshToken },
+          { 'accessToken':accessToken,'refreshToken': refreshToken },
           "Access Token refreshed!!"
         )
       );
