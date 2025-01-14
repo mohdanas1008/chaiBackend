@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import dotenv from "dotenv";
+import { ApiError } from "./ApiError.js";
 dotenv.config({
   path: "./.env",
 });
@@ -22,7 +23,7 @@ const uploadOnCloudinary = async (localFilePath) => {
     console.log("Finisehd trying to upload");
 
     // file uploaded succesfully
-    fs.unlinkSync(localFilePath); // remove locally saved temp. file as upload faied.
+    fs.unlinkSync(localFilePath); // remove locally saved temp. file as upload finsihed.
     console.log("file uploaded succesfully on cloudinary");
     return uploadResult;
   } catch (error) {
@@ -33,4 +34,29 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudinary };
+const deleteOnCloudinary = async (deletingImageUrl) => {
+  try {
+    const imagePublicId = deletingImageUrl
+      .split("/")
+      .slice(-1)[0]
+      .split(".")[0];
+    console.log(imagePublicId);
+    if (!imagePublicId) {
+      throw new ApiError(400, "Invalid PublicId of image!");
+    }
+
+    const destroyResult = await cloudinary.uploader.destroy(imagePublicId, {
+      resource_type: "auto",
+    });
+
+    if(!destroyResult)
+    {
+      throw new ApiError(400, "Failed to delete image!");
+    }
+    return destroyResult;
+  } catch (error) {
+    throw new ApiError(500, error?.message||"Destroy Operation Failed")
+  }
+};
+
+export { uploadOnCloudinary,deleteOnCloudinary };
