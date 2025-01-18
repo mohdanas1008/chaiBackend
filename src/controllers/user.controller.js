@@ -230,7 +230,7 @@ const changeUserPassword = asyncHandler(async (req, res) => {
 const getCurrentUsers = asyncHandler((req, res) => {
   return res
     .status(200)
-    .json(ApiResponse(200, req.user, "User Fetched Succesfully"));
+    .json(new ApiResponse(200, req.user, "User Fetched Succesfully"));
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -249,7 +249,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(ApiResponse(200, user, "Account Details Updated Succesfully"));
+    .json(new ApiResponse(200, user, "Account Details Updated Succesfully"));
 });
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
